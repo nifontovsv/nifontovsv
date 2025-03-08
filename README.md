@@ -2,9 +2,7 @@
   <code> 𝙷𝚎𝚕𝚕𝚘 👋 ${coders}! </code>
 </h1>
 
-<p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&duration=3000&pause=200&color=59F733&center=true&vCenter=true&width=500&lines=Welcome+to+my+GitHub!;Nice+to+see+you+here!">
-</p>
+[![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Fira+Code&duration=3000&pause=200&color=59F733&width=435&lines=Welcome+to+my+GitHub+%F0%9F%98%8E;Nice+to+see+you+here!+%F0%9F%91%80)](https://git.io/typing-svg)
 
 > I am a frontend developer from Russia. And I love writing code!  
 >  
