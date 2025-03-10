@@ -12,6 +12,8 @@
 
 ---
 
+![](https://komarev.com/ghpvc/?username=nifontosv&color=green)
+
 ### 🛠 Tech Stack  
 
 | **Category**  | **Technologies**  |
