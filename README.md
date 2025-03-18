@@ -2,7 +2,7 @@
   <code> 𝙷𝚎𝚕𝚕𝚘 👋 ${coders}! </code>
 </h1>
 
-[![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Fira+Code&duration=3000&pause=200&color=59F733&width=435&lines=Welcome+to+my+GitHub+%F0%9F%98%8E;Nice+to+see+you+here!+%F0%9F%91%80)](https://git.io/typing-svg)
+<div align='center'><img src='https://readme-typing-svg.herokuapp.com?font=Fira+Code&duration=3000&pause=200&color=59F733&width=435&lines=Welcome+to+my+GitHub+%F0%9F%98%8E;Nice+to+see+you+here!+%F0%9F%91%80'/></div>
 
 <div align='center'><img src='https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExYTdxZW55Z3ZpNjYwd3o5ZGF2OTlveHZucDh2NzZuMTl6NmVnY291ayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/f3iwJFOVOwuy7K6FFw/giphy.gif'/></div>
 
