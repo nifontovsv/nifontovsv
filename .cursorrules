@@ -1,0 +1,700 @@
+# Правила разработки проекта nifontovsv
+
+## 🔴 КРИТИЧЕСКИ ВАЖНО
+**ВСЕ изменения в коде пишу Я лично. AI ассистент НЕ должен сам вносить изменения в файлы, если я явно не прошу этого.**
+- AI должен предлагать код, объяснять, консультировать, но НЕ коммитить изменения без явной просьбы
+- AI должен задавать вопросы и уточнять перед действиями
+- Предложенные решения должны быть аргументированы
+
+**AI должен предлагать ТОЛЬКО современные подходы разработки (2024-2025)**:
+- Использовать актуальные best practices и паттерны
+- Избегать устаревших подходов и анти-паттернов
+- Следовать последним рекомендациям официальной документации
+- Применять современные стандарты ES6+ и React 19 features
+- Использовать современные библиотеки и их актуальные версии
+
+**🚀 ПРИОРИТЕТ #1: Производительность и оптимизация**
+- **Высокая производительность** - главный критерий качества кода
+- Каждый компонент и функция должны быть оптимизированы
+- Минимизировать bundle size, количество запросов, время загрузки
+- Всегда анализировать влияние на производительность перед внедрением
+- Использовать инструменты мониторинга для отслеживания метрик
+
+## 📋 Технологический стек
+
+### Frontend
+- **Framework**: Next.js 16.0.1 (App Router)
+- **React**: 19.2.0 с React Compiler
+- **TypeScript**: ^5.0 с strict mode
+- **Styling**: 
+  - Tailwind CSS 4.x
+
+### State Management & Data Fetching
+- **Zustand**: ^5.0.2 (простое глобальное состояние)
+- **TanStack Query**: ^5.62.11 (кеширование, синхронизация данных)
+
+### Формы и валидация
+- **React Hook Form**: ^7.54.2
+- **Zod**: ^3.24.1 (schema validation)
+- **@hookform/resolvers**: интеграция RHF + Zod
+
+### Backend & API
+- **Next.js API Routes**: для API эндпоинтов
+- **NextAuth.js**: ^5.0.0-beta.25 (аутентификация)
+  - OAuth 2.0 (Google, и др.)
+  - Credentials (email/password)
+  - JWT сессии
+
+### Database
+- **Prisma**: ^6.1.0 (ORM)
+- **PostgreSQL**: через pgAdmin или CLI
+- **Migrations**: Prisma Migrate
+
+### Кэширование
+- **Redis**: ^4.7.0
+  - Кэш для API запросов
+  - Сессии
+  - Rate limiting
+
+### Real-time
+- **WebSocket**: ws ^8.18.0
+  - Уведомления
+  - Live обновления
+
+### Платежи
+- **YooKassa**: @yandex-money/yandex-checkout-sdk ^3.0.0
+  - Интеграция через их SDK
+
+### Утилиты
+- **Axios**: ^1.7.9 (HTTP клиент)
+- **bcryptjs**: ^2.4.3 (хэширование паролей)
+- **jsonwebtoken**: ^9.0.2 (JWT токены)
+- **date-fns**: ^4.1.0 (работа с датами)
+- **clsx**: ^2.1.1, **tailwind-merge**: ^2.6.0 (условные классы)
+
+### Development Tools
+- **ESLint**: ^9 с eslint-config-next
+- **Prettier**: ^3.4.2 с prettier-plugin-tailwindcss
+- **Docker**: для контейнеризации
+- **Postman**: для тестирования API
+
+### Performance & Monitoring
+- **Sentry**: мониторинг ошибок и производительности
+- **Vercel Analytics**: встроенная аналитика Next.js (Web Vitals)
+- **Lighthouse CI**: автоматическая проверка производительности
+- **Web Vitals**: Core Web Vitals метрики (LCP, FID, CLS)
+- **Bundle Analyzer**: @next/bundle-analyzer для анализа бандла
+- **React DevTools Profiler**: профилирование React компонентов
+- **Chrome DevTools Performance**: профилирование рендеринга
+- APM инструменты (опционально): New Relic, DataDog
+
+### Logging
+- **Winston**: ^3.15.0 (логирование на сервере)
+- **Pino**: ^9.6.0 (альтернатива, быстрый)
+- **Console**: минимальное логирование на клиенте
+- Уровни: error, warn, info, debug
+- Ротация логов на продакшене
+- Структурированное логирование (JSON)
+
+### Testing
+- **Vitest**: ^2.1.8 (unit тесты)
+- **React Testing Library**: ^16.1.0 (компоненты)
+- **@testing-library/jest-dom**: ^6.6.3
+- **@testing-library/user-event**: ^14.5.2
+- **MSW**: Mock Service Worker для моков API
+- Покрытие кода через Vitest
+
+---
+
+## 📁 Структура проекта
+
+```
+nifontovsv/
+├── app/                          # Next.js App Router
+│   ├── (auth)/                   # Auth группы
+│   │   ├── signin/
+│   │   └── signup/
+│   ├── (protected)/              # Protected роуты
+│   │   ├── admin/
+│   │   ├── dashboard/
+│   │   └── profile/
+│   ├── api/                      # API routes
+│   │   ├── auth/
+│   │   ├── projects/
+│   │   ├── blog/
+│   │   └── payments/
+│   ├── blog/                     # Блог (публичные)
+│   ├── projects/                 # Портфолио (публичное)
+│   ├── layout.tsx
+│   ├── page.tsx                  # Главная
+│   └── globals.css
+├── components/
+│   ├── ui/                       # Базовые UI компоненты (shadcn)
+│   ├── layout/                   # Layout компоненты
+│   ├── blog/                     # Блог компоненты
+│   ├── projects/                 # Проекты компоненты
+│   └── auth/                     # Auth компоненты
+├── content/                      # Отдельное хранилище контента
+│   ├── blog/                     # Блог посты (MDX/Markdown)
+│   ├── projects/                 # Описания проектов
+│   └── pages/                    # Контент для страниц
+├── lib/
+│   ├── prisma.ts                 # Prisma client singleton
+│   ├── auth.ts                   # NextAuth конфиг
+│   ├── redis.ts                  # Redis клиент
+│   ├── websocket.ts              # WebSocket сервер
+│   ├── validations.ts            # Zod схемы
+│   ├── logger.ts                 # Winston/Pino logger
+│   └── utils.ts                  # Утилиты (cn, форматирование)
+├── store/
+│   ├── auth-store.ts             # Zustand auth store
+│   └── [feature]-store.ts        # Другие сторе
+├── hooks/
+│   └── use-[feature].ts          # Кастомные хуки
+├── types/
+│   ├── index.ts                  # Общие типы
+│   ├── next-auth.d.ts            # NextAuth типы
+│   └── prisma.d.ts               # Prisma типы
+├── prisma/
+│   ├── schema.prisma             # Database schema
+│   └── migrations/               # Миграции
+├── tests/                        # Тесты
+│   ├── __mocks__/               # Моки для тестов
+│   ├── unit/                    # Unit тесты
+│   ├── integration/             # Integration тесты
+│   └── setup.ts                 # Настройка тестов
+├── public/                       # Статические файлы
+├── docker/                       # Docker конфиги
+│   ├── docker-compose.yml
+│   └── Dockerfile
+├── logs/                         # Логи (gitignore)
+├── .env.local                    # Локальные переменные (не в git)
+├── .env.example                  # Пример переменных
+├── .cursorrules                  # Правила для AI (этот файл)
+├── .gitignore
+├── next.config.ts
+├── tsconfig.json
+├── vitest.config.ts             # Конфиг Vitest
+└── package.json
+```
+
+---
+
+## 🎯 Правила разработки
+
+### TypeScript
+- **Всегда строгая типизация**: никаких `any`, `unknown`
+- Использовать типы Prisma: `Prisma.UserCreateInput` и т.д.
+- Type guards для проверки типов
+- Interfaces для объектов, type для unions/aliases
+
+### Naming Conventions
+- **Components**: PascalCase (`UserProfile.tsx`)
+- **Functions/Variables**: camelCase (`getUserData`)
+- **Constants**: UPPER_SNAKE_CASE (`MAX_RETRY_COUNT`)
+- **Files**: kebab-case для роутов, PascalCase для компонентов
+- **Types/Interfaces**: PascalCase с описательным именем
+
+### Code Style
+- **Tailwind**: Использовать `cn()` утилиту для условных классов
+- **Imports**: Сортировать по типам (external → internal)
+- **Exports**: Named exports где возможно
+- **Components**: Functional components с TypeScript
+- **Async/Await**: Предпочитать async/await вместо Promises.then()
+- **Modern React**: Использовать hooks, избегать классов
+- **TypeScript**: Строгая типизация, type inference, избегать `any`
+- **Arrow Functions**: Предпочитать для коротких функций
+- **Template Literals**: Для строк с переменными
+- **Destructuring**: Использовать для объектов и массивов
+
+### Component Architecture
+- **Максимальное дробление**: каждый компонент делает одну вещь
+- **Универсальность**: компоненты должны быть переиспользуемыми и настраиваемыми через props
+- **Отделение контента**: весь контент хранить в `content/`, не хардкодить в компонентах
+- **Composition**: использовать паттерн композиции вместо props drilling
+- **Single Responsibility**: один компонент = одна ответственность
+- **Презентационные компоненты**: отделять UI от бизнес-логики
+
+### API Design
+- RESTful принципы для API routes
+- Всегда возвращать стандартизированные ответы:
+  ```typescript
+  { success: boolean, data?: any, error?: string }
+  ```
+- Валидация через Zod на сервере
+- Rate limiting через Redis
+- JWT для аутентификации
+
+### Database
+- Всегда использовать Prisma Client (никаких raw SQL без крайней необходимости)
+- Миграции через `prisma migrate dev`
+- Seed данные через `prisma db seed`
+- Индексы на часто используемых полях
+- Каскадное удаление где логично
+
+### Security
+- Хэшировать пароли через bcrypt (минимум 10 rounds)
+- JWT с коротким TTL, refresh tokens
+- Валидация всех user inputs
+- CORS настройки для API
+- Rate limiting на аутентификацию
+- Sanitize данных перед сохранением в БД
+- HTTPS обязательно на production
+- Content Security Policy (CSP) headers
+- Защита от XSS и SQL injection
+- Secrets в environment переменных (не в коде)
+- Регулярные обновления зависимостей (npm audit)
+
+### Performance
+- React.memo для тяжелых компонентов
+- Next.js Image для всех изображений
+- Dynamic imports для code splitting
+- TanStack Query для кэширования API
+- Redis для кэша БД запросов
+- Next.js ISR для статического контента
+- Мониторить Core Web Vitals (LCP, FID, CLS)
+- Bundle size tracking: не превышать 200KB для главной страницы
+- Lazy loading для тяжелых компонентов
+- Оптимизация изображений (WebP, AVIF)
+- Database query optimization (N+1 проблемы)
+- Кэширование на всех уровнях (CDN, Redis, TanStack Query)
+
+### Logging
+- Структурированное логирование (JSON формат)
+- Уровни: error, warn, info, debug
+- Логировать все ошибки с контекстом
+- Логировать критические операции (auth, payment)
+- Не логировать чувствительные данные (пароли, токены)
+- Ротация логов в продакшене
+- Разные логи для dev/prod окружений
+
+### Testing
+- **Компоненты**: React Testing Library + Vitest
+- **API**: Postman коллекции + MSW моки
+- **E2E**: Playwright (опционально)
+- **Unit тесты**: минимально 70% покрытие кода
+- **Integration тесты**: критические пути пользователя
+- **TDD**: писать тесты перед кодом где возможно
+- **Snapshot тесты**: для UI компонентов
+
+---
+
+## 🚀 Workflow
+
+### Git
+- Main branch: production
+- Feature branches: `feature/description`
+- Commit messages: conventional commits
+- PR обязателен перед merge
+
+### Development
+1. Pull latest changes
+2. Создать feature branch
+3. Разработка локально
+4. Тесты
+5. Push и создание PR
+6. Code review
+7. Merge
+
+### Deployment
+- Использовать Docker для контейнеризации
+- CI/CD через GitHub Actions (опционально)
+- Хостинг: Vercel (приоритет) или другой (ISPManager совместимый)
+- Blue-green deployment для zero downtime
+- Rollback стратегия при ошибках
+- Мониторинг после деплоя
+
+### Backup & Recovery
+- Регулярные бэкапы базы данных
+- Бэкап критических файлов и контента
+- Документированная процедура восстановления
+- Тестирование восстановления
+
+---
+
+## 🤔 Когда AI должен спрашивать
+
+1. **Архитектурные решения**: перед изменением структуры
+2. **Новые зависимости**: перед добавлением пакетов
+3. **Breaking changes**: изменения которые ломают существующий код
+4. **Security**: сомнительные решения по безопасности
+5. **Performance**: изменения влияющие на производительность
+6. **Непонятные требования**: неясные задачи
+
+## ⚠️ Чего избегать (Устаревшие подходы)
+
+- **Классовые компоненты**: использовать только функциональные компоненты с hooks
+- **var**: использовать только `let` и `const`
+- **function declarations**: предпочитать arrow functions
+- **callback hell**: использовать async/await вместо вложенных callbacks
+- **PropTypes**: использовать TypeScript вместо PropTypes
+- **Монолитные компоненты**: избегать больших компонентов
+- **Inline styles**: использовать Tailwind CSS классы
+- **document.querySelector**: использовать React refs
+- **ComponentWillMount**: использовать useEffect
+- **Mixin patterns**: использовать hooks для переиспользования логики
+
+---
+
+## 🎨 UI/UX Guidelines
+
+- **Mobile-first**: сначала mobile, потом desktop
+- **Accessibility**: ARIA атрибуты, semantic HTML
+- **Dark mode**: поддержка через Tailwind dark: префикс
+- **Loading states**: все асинхронные действия показывать loading
+- **Error handling**: пользовательские friendly ошибки
+- **Feedback**: Toast уведомления через Radix UI Toast
+- **SEO**: мета-теги, semantic markup, sitemap.xml, robots.txt
+- **Progressive Enhancement**: базовый функционал без JS
+- **Keyboard navigation**: полная поддержка навигации с клавиатуры
+- **Focus management**: видимые focus states
+
+---
+## 📝 Примеры архитектуры компонентов
+
+### ❌ ПЛОХО: Монолитный компонент
+```typescript
+// БАД: весь контент хардкод, нет переиспользования
+export const BlogPage = () => {
+  return (
+    <div>
+      <h1>Мой блог</h1>
+      <p>Статья номер 1: Как начать разработку</p>
+      <p>Статья номер 2: React лучшие практики</p>
+      <button onClick={() => alert('Liked!')}>Like</button>
+    </div>
+  );
+};
+```
+
+### ✅ ХОРОШО: Дробление на компоненты
+```typescript
+// components/blog/BlogHeader.tsx - Универсальный header
+interface BlogHeaderProps {
+  title: string;
+  className?: string;
+}
+
+export const BlogHeader: FC<BlogHeaderProps> = ({ title, className }) => (
+  <h1 className={cn("text-3xl font-bold", className)}>{title}</h1>
+);
+
+// components/blog/BlogPostCard.tsx - Универсальная карточка поста
+interface BlogPostCardProps {
+  title: string;
+  excerpt: string;
+  slug: string;
+  onLike?: () => void;
+}
+
+export const BlogPostCard: FC<BlogPostCardProps> = ({ 
+  title, 
+  excerpt, 
+  slug,
+  onLike 
+}) => (
+  <article>
+    <h2>{title}</h2>
+    <p>{excerpt}</p>
+    <Button onClick={onLike}>Like</Button>
+  </article>
+);
+
+// app/blog/page.tsx - Используем компоненты с данными из content/
+import { BlogHeader } from "@/components/blog/BlogHeader";
+import { BlogPostCard } from "@/components/blog/BlogPostCard";
+import { getBlogPosts } from "@/lib/content";
+
+export default async function BlogPage() {
+  const posts = await getBlogPosts(); // Данные из content/
+  
+  return (
+    <>
+      <BlogHeader title="Мой блог" />
+      {posts.map(post => (
+        <BlogPostCard 
+          key={post.slug}
+          {...post}
+          onLike={() => handleLike(post.slug)}
+        />
+      ))}
+    </>
+  );
+}
+```
+
+### ✅ Пример использования композиции
+```typescript
+// Базовый универсальный Card
+interface CardProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export const Card: FC<CardProps> = ({ children, className }) => (
+  <div className={cn("p-4 rounded-lg border", className)}>
+    {children}
+  </div>
+);
+
+// Композиция для переиспользования
+export const ProjectCard = ({ project }: { project: Project }) => (
+  <Card>
+    <Card.Title>{project.title}</Card.Title>
+    <Card.Description>{project.description}</Card.Description>
+    <Card.Actions>
+      <Button href={project.liveUrl}>Live Demo</Button>
+    </Card.Actions>
+  </Card>
+);
+
+// Тот же Card для других целей
+export const BlogCard = ({ post }: { post: BlogPost }) => (
+  <Card>
+    <Card.Title>{post.title}</Card.Title>
+    <Card.Description>{post.excerpt}</Card.Description>
+    <Card.Footer>{post.date}</Card.Footer>
+  </Card>
+);
+```
+
+---
+
+## 📝 Примеры логирования и тестирования
+
+### ✅ Правильное логирование
+```typescript
+// lib/logger.ts
+import winston from 'winston';
+
+export const logger = winston.createLogger({
+  level: process.env.LOG_LEVEL || 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
+  transports: [
+    new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
+    new winston.transports.File({ filename: 'logs/combined.log' }),
+  ],
+});
+
+if (process.env.NODE_ENV !== 'production') {
+  logger.add(new winston.transports.Console({
+    format: winston.format.simple()
+  }));
+}
+
+// Использование в коде
+logger.info('User logged in', { userId: user.id, email: user.email });
+logger.error('Payment failed', { 
+  orderId: order.id, 
+  amount: order.amount,
+  reason: error.message 
+});
+```
+
+### ✅ Пример Unit теста
+```typescript
+// tests/unit/lib/utils.test.ts
+import { describe, it, expect } from 'vitest';
+import { formatDate, generateSlug } from '@/lib/utils';
+
+describe('formatDate', () => {
+  it('should format date correctly', () => {
+    const date = new Date('2024-01-15');
+    const formatted = formatDate(date);
+    expect(formatted).toBe('15 января 2024');
+  });
+});
+
+describe('generateSlug', () => {
+  it('should generate valid slug', () => {
+    const slug = generateSlug('Hello World!');
+    expect(slug).toBe('hello-world');
+  });
+});
+```
+
+### ✅ Пример теста компонента
+```typescript
+// tests/unit/components/Button.test.tsx
+import { render, screen } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
+import { Button } from '@/components/ui/button';
+
+describe('Button', () => {
+  it('should render with text', () => {
+    render(<Button>Click me</Button>);
+    expect(screen.getByRole('button')).toHaveTextContent('Click me');
+  });
+
+  it('should be disabled', () => {
+    render(<Button disabled>Disabled</Button>);
+    expect(screen.getByRole('button')).toBeDisabled();
+  });
+});
+```
+
+---
+
+## 📝 Примеры мониторинга производительности
+
+### ✅ Web Vitals с Next.js
+```typescript
+// app/layout.tsx
+import { Analytics } from '@vercel/analytics/react';
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="ru">
+      <body>
+        {children}
+        <Analytics />
+      </body>
+    </html>
+  );
+}
+
+// lib/web-vitals.ts
+import { onCLS, onFID, onLCP, onFCP, onTTFB } from 'web-vitals';
+
+export function reportWebVitals() {
+  onCLS(console.log);
+  onFID(console.log);
+  onLCP(console.log);
+  onFCP(console.log);
+  onTTFB(console.log);
+}
+```
+
+### ✅ Bundle Analyzer
+```typescript
+// next.config.ts
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
+module.exports = withBundleAnalyzer({
+  // ... другие конфиги
+});
+
+// package.json
+{
+  "scripts": {
+    "analyze": "ANALYZE=true next build"
+  }
+}
+```
+
+### ✅ Sentry для мониторинга
+```typescript
+// lib/sentry.ts
+import * as Sentry from "@sentry/nextjs";
+
+Sentry.init({
+  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+  tracesSampleRate: 1.0,
+  environment: process.env.NODE_ENV,
+});
+
+// Использование в коде
+try {
+  // код
+} catch (error) {
+  Sentry.captureException(error);
+}
+```
+
+### ✅ Профилирование React компонентов
+```typescript
+// components/ProfiledComponent.tsx
+import { Profiler } from 'react';
+
+function onRenderCallback(
+  id: string,
+  phase: string,
+  actualDuration: number
+) {
+  console.log('Component:', id, 'Phase:', phase, 'Duration:', actualDuration);
+}
+
+export const ProfileWrapper = ({ children, id }: any) => {
+  return (
+    <Profiler id={id} onRender={onRenderCallback}>
+      {children}
+    </Profiler>
+  );
+};
+```
+
+---
+
+## 📦 Начальная настройка проекта
+
+### Первоочередные задачи перед разработкой:
+1. **Установить зависимости**: `npm install`
+2. **Настроить environment**: создать `.env.local` на основе `.env.example`
+3. **Настроить Prisma**: 
+   - Создать схему базы данных `prisma/schema.prisma`
+   - Выполнить `npx prisma generate`
+   - Настроить подключение к PostgreSQL
+4. **Настроить NextAuth**: добавить секреты и провайдеры
+5. **Создать структуру папок**: `lib/`, `components/`, `store/`, `types/`, `tests/`, `content/`
+6. **Инициализировать Redis**: настроить подключение
+7. **Настроить логирование**: Winston с папкой `logs/`
+8. **Установить shadcn/ui**: `npx shadcn-ui@latest init`
+9. **Настроить Vitest**: создать `vitest.config.ts`
+10. **Добавить Docker**: создать `docker-compose.yml` для локальной разработки
+11. **Настроить ESLint и Prettier**: проверка кода
+12. **Создать базовые типы**: Prisma types, NextAuth types
+13. **Настроить middleware**: для аутентификации и редиректов
+14. **Добавить Sentry (опционально)**: для мониторинга ошибок
+
+### Environment переменные (.env.local):
+```env
+# Database
+DATABASE_URL="postgresql://user:password@localhost:5432/nifontovsv"
+
+# NextAuth
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your-secret-here"
+
+# Redis
+REDIS_URL="redis://localhost:6379"
+
+# OAuth
+GOOGLE_CLIENT_ID=""
+GOOGLE_CLIENT_SECRET=""
+
+# Payment
+YOOKASSA_SHOP_ID=""
+YOOKASSA_SECRET_KEY=""
+
+# Monitoring
+SENTRY_DSN=""
+```
+
+---
+
+## 🔗 Полезные ссылки
+
+- Next.js: https://nextjs.org/docs
+- Prisma: https://www.prisma.io/docs
+- Tailwind: https://tailwindcss.com/docs
+- NextAuth: https://next-auth.js.org
+- TanStack Query: https://tanstack.com/query
+- Zustand: https://zustand-demo.pmnd.rs
+- Vitest: https://vitest.dev
+- Testing Library: https://testing-library.com
+- Winston: https://github.com/winstonjs/winston
+- MSW: https://mswjs.io
+- Sentry: https://sentry.io
+- Vercel Analytics: https://vercel.com/analytics
+- Lighthouse CI: https://github.com/GoogleChrome/lighthouse-ci
+- Web Vitals: https://web.dev/vitals
+- Bundle Analyzer: https://www.npmjs.com/package/@next/bundle-analyzer
